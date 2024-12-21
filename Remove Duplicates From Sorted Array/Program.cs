@@ -1,8 +1,8 @@
-﻿namespace Remove_Duplicates_From_Sorted_Array;
+﻿namespace Remove_Duplicates_from_Sorted_Array;
 
-public class Program
+class Program
 {
-    public static int[] input = [1,1,2];
+     public static int[] input = [1,1,2];
 
     static void Main(string[] args)
     {
