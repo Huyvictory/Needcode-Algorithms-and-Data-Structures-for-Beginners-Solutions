@@ -4,7 +4,7 @@ class Program
 {
     public static void TestCase1()
     {
-        MyLinkedList myLinkedList = new MyLinkedList();
+        MyLinkedList2 myLinkedList = new MyLinkedList2();
         myLinkedList.AddAtHead(1);
         myLinkedList.AddAtTail(3);
         myLinkedList.AddAtIndex(1, 2); // linked list becomes 1->2->3
@@ -17,14 +17,14 @@ class Program
 
     public static void TestCase2()
     {
-        MyLinkedList myLinkedList = new MyLinkedList();
+        MyLinkedList2 myLinkedList = new MyLinkedList2();
         myLinkedList.AddAtHead(1);
         myLinkedList.DeleteAtIndex(0);
     }
 
     public static void TestCase3()
     {
-        MyLinkedList myLinkedList = new MyLinkedList();
+        MyLinkedList2 myLinkedList = new MyLinkedList2();
         myLinkedList.AddAtHead(7);
         myLinkedList.AddAtHead(2);
         myLinkedList.AddAtHead(1);
@@ -42,16 +42,16 @@ class Program
 
     public static void TestCase4()
     {
-        MyLinkedList myLinkedList = new MyLinkedList();
+        MyLinkedList2 myLinkedList = new MyLinkedList2();
         myLinkedList.AddAtTail(1);
         Console.WriteLine(myLinkedList.Get(0));
     }
 
     static void Main(string[] args)
     {
-        // TestCase1();
+        TestCase1();
         // TestCase2();
         // TestCase3();
-        TestCase4();
+        // TestCase4();
     }
 }
