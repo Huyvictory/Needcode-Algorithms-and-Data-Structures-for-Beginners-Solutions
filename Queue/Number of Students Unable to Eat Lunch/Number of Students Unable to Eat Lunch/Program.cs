@@ -19,6 +19,10 @@ class Program
         return [[0,0,1,1,0,0,0,0,1,0,0,1,1,0,1,1], [1,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0]];
     }
 
+    public static int[][] TestCase5() {
+        return [[1,1], [0,1]];
+    }
+
     public static bool ShouldSkipLoop(StudentNode student, SandwichNode sandwich) {
         StudentNode currentTraversalStudent = student;
         SandwichNode currentTraversalSandwich = sandwich;
@@ -87,13 +91,45 @@ class Program
         
     }
 
+    public static int CountStudents2(int[] students, int[] sandwiches) {
+        var StudentsPreferences = new Dictionary<int, int>{
+            {1, 0}, 
+            {0, 0}
+            };
+
+        foreach (int student in students)
+        {
+            StudentsPreferences[student] = StudentsPreferences[student] + 1;
+        }
+
+        foreach (int sandwich in sandwiches)
+        {
+            if (StudentsPreferences[sandwich] > 0) {
+                StudentsPreferences[sandwich] = StudentsPreferences[sandwich] - 1;
+            }
+            else {
+                break;
+            }
+        }
+
+        return StudentsPreferences[0] + StudentsPreferences[1];
+    }
+
     static void Main(string[] args)
     {
         Console.WriteLine(CountStudents(TestCase1()[0], TestCase1()[1]));
         Console.WriteLine(CountStudents(TestCase2()[0], TestCase2()[1]));
         Console.WriteLine(CountStudents(TestCase3()[0], TestCase3()[1]));
         Console.WriteLine(CountStudents(TestCase4()[0], TestCase4()[1]));
+        Console.WriteLine(CountStudents(TestCase5()[0], TestCase5()[1]));
 
+        Console.WriteLine("-------------------------------------------------");
+
+        Console.WriteLine(CountStudents2(TestCase1()[0], TestCase1()[1]));
+        Console.WriteLine(CountStudents2(TestCase2()[0], TestCase2()[1]));
+        Console.WriteLine(CountStudents2(TestCase3()[0], TestCase3()[1]));
+        Console.WriteLine(CountStudents2(TestCase4()[0], TestCase4()[1]));
+        Console.WriteLine(CountStudents2(TestCase5()[0], TestCase5()[1]));
         return;
     }
 }
