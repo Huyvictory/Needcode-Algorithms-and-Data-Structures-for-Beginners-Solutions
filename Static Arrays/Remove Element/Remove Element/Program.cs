@@ -19,14 +19,14 @@ class Program
     }
 
     public static void PrintArray(int[] arrayToPrint) {
-        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("-----------------------------------------");
 
         for (int i = 0; i < arrayToPrint.Length; i++)
         {
             Console.WriteLine($"Elements at {i} - {arrayToPrint[i]}");
         }
 
-        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("-----------------------------------------");
 
     }
 
