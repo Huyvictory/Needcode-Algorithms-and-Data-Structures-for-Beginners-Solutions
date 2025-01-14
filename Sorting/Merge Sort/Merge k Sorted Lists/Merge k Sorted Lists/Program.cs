@@ -248,6 +248,58 @@ class Program
         return nullFilteredList.Length == 0 ? (null, true) : (nullFilteredList.ToList(), false);
     }
 
+    public static ListNode MergePairLinkedLists(ListNode listLeft, ListNode listRight) {
+        var dummyHeadNode = new ListNode(0);
+        var tailNode = dummyHeadNode;
+
+        while (listLeft != null & listRight != null) {
+            if (listLeft.val <= listRight.val) {
+                tailNode.next = listLeft;
+                tailNode = listLeft;
+                listLeft = listLeft.next;
+            }
+            else {
+                tailNode.next = listRight;
+                tailNode = listRight;
+                listRight = listRight.next;
+            }
+        }
+
+        if (listLeft != null) {
+            tailNode.next = listLeft;
+            tailNode = listLeft;
+        }
+        
+        if (listRight != null) {
+            tailNode.next = listRight;
+            tailNode = listRight;
+        }
+
+        return dummyHeadNode.next;
+    }
+
+    public static ListNode MergeKLists2(ListNode[] lists)
+    {
+        if (lists == null || lists.Length == 0)
+            return null;
+
+        while (lists.Length > 1) {
+
+            List<ListNode> mergedSortedLinkedListsLevel = [];
+
+            for (int i = 0; i < lists.Length; i+=2) {
+                ListNode listLeft = lists[i];
+                ListNode listRight = (i +1 < lists.Length) ?  lists[i +1] : null;
+
+                mergedSortedLinkedListsLevel.Add(MergePairLinkedLists(listLeft, listRight));
+            }
+
+            lists = mergedSortedLinkedListsLevel.ToArray();
+        }
+
+        return lists[0];
+    }
+
     static void Main(string[] args)
     {
         ListNode mergedKList = null;
@@ -261,6 +313,8 @@ class Program
         }
 
         mergedKList = MergeKLists(filterReturn.ToArray());
+
+        var mergedKList2 = MergeKLists2(TestCase7().ToArray());
 
         return;
     }
