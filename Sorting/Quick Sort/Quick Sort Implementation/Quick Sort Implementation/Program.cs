@@ -19,9 +19,16 @@ class Program
         };
     }
 
-    public static List<Pair> QuickSort(List<Pair> pairs)
+    public static List<Pair> TestCase3()
     {
-        return QuickSortImplementation(pairs, 0, pairs.Count - 1);
+        return new List<Pair>
+        {
+            new Pair(6, "apple"),
+            new Pair(2, "banana"),
+            new Pair(4, "cherry"),
+            new Pair(1, "date"),
+            new Pair(3, "elderberry")
+        };
     }
 
     public static List<Pair> QuickSortImplementation(List<Pair> pairs, int start, int end)
@@ -52,6 +59,57 @@ class Program
         QuickSortImplementation(pairs, swapPointer + 1, end);
 
         return pairs;
+    }
+
+    public static List<Pair> QuickSortImplementation2(List<Pair> pairs, int left, int right)
+    {
+        int i = left,
+            j = right;
+
+        Pair tmp;
+
+        int pivot = (left + right) / 2;
+
+        while (i <= j)
+        {
+            while (pairs[i].Key < pairs[pivot].Key)
+
+                i++;
+
+            while (pairs[j].Key > pairs[pivot].Key)
+
+                j--;
+
+            if (i <= j)
+            {
+                tmp = pairs[i];
+
+                pairs[i] = pairs[j];
+
+                pairs[j] = tmp;
+
+                i++;
+
+                j--;
+            }
+        }
+
+        int index = i;
+
+        if (left < index - 1)
+
+            QuickSortImplementation2(pairs, left, index - 1);
+
+        if (index < right)
+
+            QuickSortImplementation2(pairs, index, right);
+
+        return pairs;
+    }
+
+    public static List<Pair> QuickSort(List<Pair> pairs)
+    {
+        return QuickSortImplementation2(pairs, 0, pairs.Count - 1);
     }
 
     static void Main(string[] args)
