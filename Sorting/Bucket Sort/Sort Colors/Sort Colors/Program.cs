@@ -69,9 +69,48 @@ class Program
         return;
     }
 
+    public static void Swap2Elements(int[] arr_nums, int num1, int num2)
+    {
+        int temp = arr_nums[num1];
+
+        arr_nums[num1] = arr_nums[num2];
+
+        arr_nums[num2] = temp;
+    }
+
+    public static void SortColors2(int[] nums)
+    {
+        if (nums.Length <= 1)
+            return;
+
+        int left = 0,
+            right = nums.Length - 1;
+
+        int swapPointer = left;
+
+        while (swapPointer <= right)
+        {
+            if (nums[swapPointer] == 0)
+            {
+                Swap2Elements(nums, left, swapPointer);
+                left++;
+            }
+            else if (nums[swapPointer] == 2)
+            {
+                Swap2Elements(nums, swapPointer, right);
+                right--;
+                swapPointer--;
+            }
+
+            swapPointer++;
+        }
+
+        return;
+    }
+
     static void Main(string[] args)
     {
-        SortColors(TestCase6());
+        SortColors2(TestCase1());
 
         return;
     }
