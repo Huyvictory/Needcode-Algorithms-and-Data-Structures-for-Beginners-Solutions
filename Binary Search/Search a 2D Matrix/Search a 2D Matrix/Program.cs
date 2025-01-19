@@ -17,6 +17,11 @@ class Program
         return new int[][] { new int[] { 1, 3 } };
     }
 
+    public static int[][] TestCase3()
+    {
+        return new int[][] { new int[] { 1 } };
+    }
+
     public static bool BinarySearch(int[] subArrayMatrix, int target)
     {
         int left = 0,
@@ -66,10 +71,68 @@ class Program
         return false;
     }
 
+    public static bool SearchMatrix2(int[][] matrix, int target)
+    {
+        int topRow = 0,
+            bottomRow = matrix.Length - 1;
+
+        // Binary search rows to find row that contains target
+        while (topRow <= bottomRow)
+        {
+            int mediumRow = topRow + ((bottomRow - topRow) / 2);
+
+            if (target < matrix[mediumRow][0])
+            {
+                bottomRow = mediumRow - 1;
+            }
+            else if (target > matrix[mediumRow][matrix[mediumRow].Length - 1])
+            {
+                topRow = mediumRow + 1;
+            }
+            // Medium row might contain target
+            else
+            {
+                break;
+            }
+        }
+
+        // Medium row does not contain target
+        if (topRow > bottomRow)
+        {
+            return false;
+        }
+
+        int mediumRowContainsTarget = topRow + ((bottomRow - topRow) / 2);
+
+        int left = 0,
+            right = matrix[mediumRowContainsTarget].Length - 1;
+
+        while (left <= right)
+        {
+            int medium = left + ((right - left) / 2);
+
+            if (target > matrix[mediumRowContainsTarget][medium])
+            {
+                left = medium + 1;
+            }
+            else if (target < matrix[mediumRowContainsTarget][medium])
+            {
+                right = medium - 1;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     static void Main(string[] args)
     {
-        Console.WriteLine(SearchMatrix(TestCase1(), 3));
-        Console.WriteLine(SearchMatrix(TestCase1(), 13));
-        Console.WriteLine(SearchMatrix(TestCase2(), 3));
+        Console.WriteLine(SearchMatrix2(TestCase1(), 3));
+        Console.WriteLine(SearchMatrix2(TestCase1(), 13));
+        Console.WriteLine(SearchMatrix2(TestCase2(), 3));
+        Console.WriteLine(SearchMatrix2(TestCase3(), 2));
     }
 }
