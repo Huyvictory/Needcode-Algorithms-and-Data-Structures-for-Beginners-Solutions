@@ -59,10 +59,42 @@ class Program
         return result;
     }
 
+    public static int KthSmallestIteration(TreeNode root, int k)
+    {
+        TreeNode current = root;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+
+        while (current != null || stack.Count > 0)
+        {
+            // Focus on traverse to the left first
+            while (current != null)
+            {
+                stack.Push(current);
+                current = current.left;
+            }
+
+            // Visit the current sub node then check for the kth traversal
+            var visitedSubNode = stack.Pop();
+            traversalOrder++;
+
+            if (traversalOrder == k)
+                return visitedSubNode.val;
+
+            if (visitedSubNode.right != null)
+                current = visitedSubNode.right;
+        }
+
+        return -1;
+    }
+
     static void Main(string[] args)
     {
-        // Console.WriteLine(KthSmallest(TestCase1(), 3));
-        // Console.WriteLine(KthSmallest(TestCase2(), 1));
+        Console.WriteLine(KthSmallest(TestCase1(), 3));
+        Console.WriteLine(KthSmallest(TestCase2(), 1));
         Console.WriteLine(KthSmallest(TestCase3(), 2));
+
+        Console.WriteLine(KthSmallestIteration(TestCase1(), 3));
+        Console.WriteLine(KthSmallestIteration(TestCase2(), 1));
+        Console.WriteLine(KthSmallestIteration(TestCase3(), 2));
     }
 }
