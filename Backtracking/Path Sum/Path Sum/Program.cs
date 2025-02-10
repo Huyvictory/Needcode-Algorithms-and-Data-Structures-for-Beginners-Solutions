@@ -3,7 +3,6 @@
 class Program
 {
     public static int sum = 0;
-    public static bool hasFoundPath = false;
 
     public static TreeNode TestCase1()
     {
@@ -48,11 +47,6 @@ class Program
 
     public static bool HasPathSum(TreeNode root, int targetSum)
     {
-        if (hasFoundPath)
-        {
-            return true;
-        }
-
         if (root == null)
         {
             return false;
@@ -63,23 +57,25 @@ class Program
         // Leaf node reached
         if (root.left == null && root.right == null)
         {
-            if (sum != targetSum)
+            if (sum == targetSum)
+            {
+                return true;
+            }
+            else
             {
                 sum -= root.val;
                 return false;
             }
+        }
+
+        if (HasPathSum(root.left, targetSum) || HasPathSum(root.right, targetSum))
+        {
             return true;
         }
 
-        if (!HasPathSum(root.left, targetSum) && !HasPathSum(root.right, targetSum))
-        {
-            sum -= root.val;
-            return false;
-        }
+        sum -= root.val;
 
-        hasFoundPath = true;
-
-        return true;
+        return false;
     }
 
     static void Main(string[] args)
