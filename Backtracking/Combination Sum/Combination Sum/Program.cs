@@ -17,45 +17,33 @@ class Program
     }
 
     public static IList<IList<int>> CombinationSum(int[] candidates, int target) {
-        foreach (int candidate in candidates)
-        {
-            helperDFS(candidates, [], Array.IndexOf(candidates, candidate), 0, target );
-        }
-
+       
+        helperDFS(candidates, [], 0, 0, target );
         return result;
      }
 
      public static void helperDFS(int[] candidates, List<int> traversePath ,int index, int sum, int target) {
         
-            sum += candidates[index];
-            traversePath.Add(candidates[index]);        
-
             if (sum == target) {
                 result.Add(traversePath.ToArray());
-                traversePath.RemoveAt(traversePath.Count - 1);
                 return;
             }
 
-            if (sum > target) {
-                traversePath.RemoveAt(traversePath.Count - 1);
+            if (sum > target || index >= candidates.Length) {
                 return;
             }
+
+            sum += candidates[index]; 
+            traversePath.Add(candidates[index]);
 
             // Add itself
             helperDFS(candidates, traversePath, index, sum, target);
 
-            // Combination of other element in the candidates array start from current decision
-            for (int i = index + 1; i < candidates.Length; i++)
-            {
-                if (i < candidates.Length)
-                {
-                    helperDFS(candidates, traversePath, i, sum, target);
-                }
-            }
-            
+            // Backtrack
+            traversePath.RemoveAt(traversePath.Count - 1);  
 
-            traversePath.RemoveAt(traversePath.Count - 1);
-        
+            // Combination of other elements in the candidates array
+            helperDFS(candidates, traversePath, index + 1, sum - candidates[index], target); 
      }
 
     static void Main(string[] args)
