@@ -22,6 +22,22 @@ class Program
         return heapMax;
     }
 
+    private static PriorityQueue<int, int> HeapifyMin(int[] nums, int k)
+    {
+        PriorityQueue<int, int> heapMin = new PriorityQueue<int, int>();
+
+        foreach (int num in nums)
+        {
+            heapMin.Enqueue(num, num);
+
+            if (heapMin.Count > k) {
+                heapMin.Dequeue();
+            }
+        }
+
+        return heapMin;
+    }
+
     public static int FindKthLargest(int[] nums, int k)
     {
         var heapMax = HeapifyMax(nums);
@@ -35,9 +51,19 @@ class Program
         return heapMax.Peek();
     }
 
+    public static int FindKthLargest2(int[] nums, int k)
+    {
+        var heapMin = HeapifyMin(nums, k);
+
+        return heapMin.Peek();
+    }
+
     static void Main(string[] args)
     {
-        // Console.WriteLine(FindKthLargest(TestCase1().nums, TestCase1().k));
-        Console.WriteLine(FindKthLargest(TestCase2().nums, TestCase2().k));
+        Console.WriteLine(FindKthLargest(TestCase1().nums, TestCase1().k));
+        // Console.WriteLine(FindKthLargest(TestCase2().nums, TestCase2().k));
+
+        // Console.WriteLine(FindKthLargest2(TestCase1().nums, TestCase1().k));
+        // Console.WriteLine(FindKthLargest2(TestCase2().nums, TestCase2().k));
     }
 }
