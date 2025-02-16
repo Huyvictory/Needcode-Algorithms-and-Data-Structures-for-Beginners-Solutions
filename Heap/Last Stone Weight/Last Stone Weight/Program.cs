@@ -29,6 +29,14 @@ class Program
         }
     }
 
+    private static void Heapify2(int[] stones)
+    {
+        foreach (int stone in stones)
+        {
+            minHeap.Enqueue(-stone, -stone);
+        }
+    }
+
     public static int LastStoneWeight(int[] stones)
     {
         if (stones.Length == 1)
@@ -61,6 +69,27 @@ class Program
         }
 
         return listStones.Count == 0 ? 0 : listStones[0];
+    }
+
+    public static int LastStoneWeight2(int[] stones)
+    {
+        if (stones.Length == 1)
+            return stones[0];
+        
+        Heapify2(stones);
+
+        while (minHeap.Count > 1) {
+            var stone1 = minHeap.Dequeue();
+            var stone2 = minHeap.Dequeue();
+
+            if (stone1 != stone2) {
+                minHeap.Enqueue(stone1 - stone2, stone1 - stone2);
+            }
+        }
+
+        minHeap.Enqueue(0, 0);
+
+        return Math.Abs(minHeap.Peek());
     }
 
     static void Main(string[] args)
