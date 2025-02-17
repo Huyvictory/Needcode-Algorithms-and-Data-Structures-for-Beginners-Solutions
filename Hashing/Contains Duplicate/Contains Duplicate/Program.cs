@@ -32,9 +32,38 @@ class Program
         return false;
     }
 
+    private static bool BruteForceApproach(int[] nums) {
+        for (int i = 0; i < nums.Length; i++)
+        {
+            for (int j = i + 1; j < nums.Length; j++)
+            {
+                if (nums[i] == nums[j]) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TwoPointersApproach(int[] nums) {
+        Array.Sort(nums);
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            if (i + 1 < nums.Length && nums[i] == nums[i + 1]) {
+                return true;
+            }   
+        }
+
+        return false;
+    }
+
     public static bool ContainsDuplicate(int[] nums)
     {
-        return HashMapApproach(nums);
+        // return HashMapApproach(nums);
+        // return BruteForceApproach(nums);
+        return TwoPointersApproach(nums);
     }
 
     static void Main(string[] args)
