@@ -46,8 +46,45 @@ class Program
         return result;
     }
 
+    private static int[] BinarySearchImplementation(int[] nums, int target) {
+        var nums_sorted = nums.ToArray();
+        Array.Sort(nums_sorted);
+
+        int left = 0;
+        int right = nums.Length - 1;
+
+        while (true) {
+            int sum = nums_sorted[left] + nums_sorted[right];
+
+            if (sum < target) {
+                left++;
+            }
+            else if (sum > target) {
+                right--;
+            }
+            else {
+                var index1 = Array.IndexOf(nums, nums_sorted[left]);
+                var index2 = Array.IndexOf(nums, nums_sorted[right]);
+                
+                if (index1 != index2) {
+                    return [index1, index2];
+                }
+                else {
+                    for (int i = index1 + 1; i < nums.Length; i++)
+                    {
+                        if (nums[i] == nums_sorted[left]) {
+                            return [index1, i];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static int[] TwoSum(int[] nums, int target) {
-        return HashMapImplementation(nums, target);
+        // return HashMapImplementation(nums, target);
+
+        return BinarySearchImplementation(nums, target);
      }
 
     static void Main(string[] args)
