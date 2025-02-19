@@ -1,13 +1,13 @@
 namespace Design_Hash_Table;
 
 // Open Address Hash Collision implementation
-public class HashTable
+public class HashTableOpenAddress
 {
     private List<Pair> map;
     private int capacity;
     private int size;
 
-    public HashTable(int capacity)
+    public HashTableOpenAddress(int capacity)
     {
         this.capacity = capacity;
         size = 0;
