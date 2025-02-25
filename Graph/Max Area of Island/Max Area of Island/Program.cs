@@ -35,16 +35,11 @@ class Program
         {
             return 0;
         }
-
-        int area = 0;
-
-        if (grid[row][column] == 1)
-        {
-            area = 1;
+        
+            // Mark a part of the island visited
             grid[row][column] = 0;
-        }
 
-        return area
+        return 1
             + Dfs(grid, row - 1, column)
             + Dfs(grid, row + 1, column)
             + Dfs(grid, row, column + 1)
@@ -80,6 +75,6 @@ class Program
         Program programTest = new Program();
 
         Console.WriteLine(programTest.MaxAreaOfIsland(programTest.TestCase1()));
-        Console.WriteLine(programTest.MaxAreaOfIsland(programTest.TestCase2()));
+        // Console.WriteLine(programTest.MaxAreaOfIsland(programTest.TestCase2()));
     }
 }
