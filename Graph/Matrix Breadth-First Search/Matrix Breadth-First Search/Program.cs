@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace Matrix_Breadth_First_Search;
+﻿namespace Matrix_Breadth_First_Search;
 
 class Program
 {
