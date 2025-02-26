@@ -56,7 +56,6 @@ class Program
             new HashSet<(int rowLevel, int columnLevel)>();
 
         
-        
         List<List<int>> directions = [[0, 1], [1, 1], [-1, -1], [-1, 0], [-1, 1], [0, -1], [1, -1], [1, 0]];
 
         queue.Enqueue((0, 0));
@@ -99,15 +98,66 @@ class Program
         return -1;
     }
 
+    private int ShortestPathBinaryMatrixImplementation2(int[][] grid)
+    {
+        int totalRows = grid.Length;
+        int totalColumns = grid[0].Length;
+
+        if (grid.Length == 1 && grid[0][0] == 0) return 1;
+
+        if (grid[0][0] == 1 || grid[totalRows -1][totalColumns - 1] == 1) return -1;
+
+        Queue<(int rowLevel, int columnLevel, int level)> queue = new Queue<(int rowLevel, int columnLevel, int level)>();
+        
+        List<List<int>> directions = [[0, 1], [1, 1], [-1, -1], [-1, 0], [-1, 1], [0, -1], [1, -1], [1, 0]];
+
+        queue.Enqueue((0, 0, 1));
+
+        while (queue.Any())
+        {
+            int NumberOfCoordinatesLevel = queue.Count;
+
+            for (int coordinate = 0; coordinate < NumberOfCoordinatesLevel; coordinate++)
+            {
+                var currentCoordinate = queue.Dequeue();
+
+                // If the coordinate of the current traversing level is the target destination then return its level
+                if (currentCoordinate.rowLevel == totalRows - 1 && currentCoordinate.columnLevel == totalColumns - 1) {
+                    return currentCoordinate.level;
+                }
+
+                // Check for other possible traversable neighbor coordinates from the current one
+                // If the traversable coordinate found then visit and add to queue for next level traversing
+                foreach (var direction in directions)
+                {
+                    var neighborRow = currentCoordinate.rowLevel + direction[0];
+                    var neighborColumn = currentCoordinate.columnLevel + direction[1];
+
+                    if (Math.Min(neighborRow, neighborColumn) < 0 
+                    || neighborRow == totalRows
+                    || neighborColumn == totalColumns 
+                    || grid[neighborRow][neighborColumn] == 1) {
+                        continue;
+                    }
+                    
+                    queue.Enqueue((neighborRow, neighborColumn, currentCoordinate.level + 1));
+                    grid[neighborRow][neighborColumn] = 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+
     public int ShortestPathBinaryMatrix(int[][] grid)
     {
-        return ShortestPathBinaryMatrixImplementation(grid);
+        return ShortestPathBinaryMatrixImplementation2(grid);
     }
 
     static void Main(string[] args)
     {
         Program testProgram = new Program();
 
-        Console.WriteLine(testProgram.ShortestPathBinaryMatrix(TestCase5()));
+        Console.WriteLine(testProgram.ShortestPathBinaryMatrix(TestCase1()));
     }
 }
