@@ -9,11 +9,6 @@ class Program
             return null;
         }
 
-        if (node.neighbors.Count == 0)
-        {
-            return new Node(node.val, node.neighbors.ToList());
-        }
-
         Queue<Node> queue = new Queue<Node>();
         Dictionary<Node, Node> clonedNodes = new Dictionary<Node, Node>()
         {
@@ -42,6 +37,39 @@ class Program
                 }
             }
         }
+
+        return clonedNodes[node];
+    }
+
+    private Node Dfs(Node node, Dictionary<Node, Node> clonedNodes)
+    {
+        // the node has already been visited, cloned
+        if (clonedNodes.ContainsKey(node))
+        {
+            return clonedNodes[node];
+        }
+
+        // Clone itself
+        var newNodeInstance = new Node(node.val);
+
+        // Add to map marked as visited
+        clonedNodes.Add(node, newNodeInstance);
+
+        // Clone its neighbor nodes and add to list
+        foreach (var neighbor in node.neighbors)
+        {
+            newNodeInstance.neighbors.Add(Dfs(neighbor, clonedNodes));
+        }
+
+        // return cloned instance of a node
+        return newNodeInstance;
+    }
+
+    public Node CloneGraphDFS(Node node)
+    {
+        Dictionary<Node, Node> clonedNodes = new Dictionary<Node, Node>();
+
+        Dfs(node, clonedNodes);
 
         return clonedNodes[node];
     }
