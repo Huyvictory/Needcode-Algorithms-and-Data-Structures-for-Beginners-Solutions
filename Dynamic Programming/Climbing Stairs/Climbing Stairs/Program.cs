@@ -33,6 +33,35 @@ class Program
         return MemorizeSteps[takenStep];
     }
 
+    private int ClimbStairsBottomUp(int target)
+    {
+        List<int> dpSteps = new List<int>() { 1, 1 };
+
+        // For step number n and n - 1 we all have 1 way of reaching to step n
+        // So we have to minus two for those two steps and get number of previous step numbers that need
+        // to update the amount of unique ways reaching to top by depending dynamically number of ways of two recent step
+        int i = target - 2;
+
+        while (i >= 0)
+        {
+            // Memorize the recent step number ways of reach to top
+            int temp = dpSteps[0];
+
+            // Dynamically update the recent step numbers
+
+            // Calculate the number of ways to reach to top of current previous step number (each iteration)
+            dpSteps[0] = dpSteps[0] + dpSteps[1];
+
+            dpSteps[1] = temp;
+
+            // Move to the next previous step to compute number of ways reaching to top
+            // (depend on two recent dynamically updated step after)
+            i--;
+        }
+
+        return dpSteps[0];
+    }
+
     public int ClimbStairs(int n)
     {
         return ClimbStairsTopDown(0, n);
