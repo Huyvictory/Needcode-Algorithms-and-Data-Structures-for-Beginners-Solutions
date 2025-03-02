@@ -40,6 +40,60 @@ class Program
         ];
     }
 
+    private static int[][] TestCase6() {
+        return [
+            [0,0],
+            [1,1],
+            [0,0]
+        ];
+    }
+
+    private static int[][] TestCase7() {
+        return [
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [1,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [1,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,1],
+            [0,0],
+            [0,0],
+            [1,0],
+            [0,0],
+            [0,0],
+            [0,1],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,1],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [1,0],
+            [0,0],
+            [0,0],
+            [0,0],
+            [0,0]
+        ];
+    }
+
     private int UniquePathsWithObstaclesTopDown(int[][] obstacleGrid, int row, int col, Dictionary<(int row, int column), int> cache)
     {
         if (row == obstacleGrid.Length - 1 && col == obstacleGrid[0].Length - 1)
@@ -99,20 +153,43 @@ class Program
         return numberOfUniquePaths;
     }
 
+    private int UniquePathsWithObstaclesBottomUp(int[][] obstacleGrid) {
+
+        int[,] dp = new int[obstacleGrid.Length, obstacleGrid[0].Length];
+
+        dp[obstacleGrid.Length - 1, obstacleGrid[0].Length - 1] = 1;
+
+        for (int row = dp.GetUpperBound(0); row >= 0; row--) {
+            for (int col = dp.GetUpperBound(1); col >= 0; col--) {
+                if (row == dp.GetUpperBound(0) && col == dp.GetUpperBound(1)) {
+                    continue;
+                }
+
+                if (obstacleGrid[row][col] == 1) {
+                    dp[row, col] = 0;
+                }
+                else {
+                    dp[row, col] += row + 1 <= dp.GetUpperBound(0) ?  dp[row + 1, col] : 0;
+                    dp[row, col] += col + 1 <= dp.GetUpperBound(1) ?  dp[row, col + 1] : 0;
+                }
+            }
+        }
+
+        return dp[0, 0];
+    }
+
     public int UniquePathsWithObstacles(int[][] obstacleGrid)
     {
         if (obstacleGrid[0][0] == 1 || obstacleGrid[obstacleGrid.Length - 1][obstacleGrid[0].Length - 1] == 1) {
             return 0;
         }
 
-        var cache = new Dictionary<(int row, int column), int>();
-
-        return UniquePathsWithObstaclesTopDown2(obstacleGrid, 0, 0, cache);
+        return UniquePathsWithObstaclesBottomUp(obstacleGrid);
     }
 
     static void Main(string[] args)
     {
         Program testProgram = new Program();
-        Console.WriteLine(testProgram.UniquePathsWithObstacles(TestCase5()));
+        Console.WriteLine(testProgram.UniquePathsWithObstacles(TestCase1()));
     }
 }
