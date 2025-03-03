@@ -29,11 +29,33 @@ class Program
         return ans;
     }
 
+    public int[] CountBits2(int n)
+    {
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+
+        int offset = 1;
+
+        for (int i = 1; i < dp.Length; i++)
+        {
+            if (offset * 2 == i)
+            {
+                offset = i;
+            }
+
+            // Number of 1 bits depend on the current significant bit that the current number is holding
+            // combine with bits 1 calculated from previous other number
+            dp[i] = 1 + dp[i - offset];
+        }
+
+        return dp;
+    }
+
     static void Main(string[] args)
     {
         Program testProgram = new Program();
 
-        testProgram.CountBits(5);
+        testProgram.CountBits2(5);
 
         return;
     }
