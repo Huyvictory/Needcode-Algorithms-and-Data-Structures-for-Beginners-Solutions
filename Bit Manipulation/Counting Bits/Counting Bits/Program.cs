@@ -38,6 +38,7 @@ class Program
 
         for (int i = 1; i < dp.Length; i++)
         {
+            // Current number is a number that has the significant 1 bit shifted to left
             if (offset * 2 == i)
             {
                 offset = i;
