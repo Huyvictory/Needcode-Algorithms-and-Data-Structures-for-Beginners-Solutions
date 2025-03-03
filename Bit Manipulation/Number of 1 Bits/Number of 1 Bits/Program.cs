@@ -22,10 +22,25 @@ class Program
         return count;
     }
 
+    public int HammingWeight2(int n)
+    {
+        int count = 0;
+
+        while (n > 0)
+        {
+            // Get rid of the 1 bit in the n integer
+            n &= n - 1;
+
+            count++;
+        }
+
+        return count;
+    }
+
     static void Main(string[] args)
     {
         Program testProgram = new Program();
 
-        Console.WriteLine(testProgram.HammingWeight(2147483645));
+        Console.WriteLine(testProgram.HammingWeight2(2147483645));
     }
 }
