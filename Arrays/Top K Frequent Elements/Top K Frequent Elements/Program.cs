@@ -62,9 +62,56 @@ class Program
         return result.ToArray();
     }
 
+    //TC: O(n), SC: O(n)
+    private static int[] TopKFrequentBuckSort(int[] nums, int k) {
+        var map = new Dictionary<int, int>();
+        List<int>[] occurrencesArray = new List<int>[nums.Length + 1];
+
+        for (int i = 0; i < nums.Length + 1; i++)
+        {
+            occurrencesArray[i] = new List<int>();
+        }
+
+        var result = new List<int>();
+
+        // Count frequency for each number
+        foreach (var num in nums)
+        {
+            if (!map.ContainsKey(num))
+            {
+                map.Add(num, 1);
+            }
+            else {
+                map[num] += 1;
+            }       
+        }
+
+        // populate the number key with respective occurrence index (bucket sort)
+        foreach (var pair in map)
+        {
+            occurrencesArray[pair.Value].Add(pair.Key);
+        }
+
+        // Iterate every sub array 
+        // from the largest occurrence to 1 and add every single number of that sub array current occurrence into result
+        for (int i = occurrencesArray.Length - 1; i >= 1; i--) {
+            if (occurrencesArray[i].Count > 0) {
+                for (int j = 0; j < occurrencesArray[i].Count; j++) {
+                    result.Add(occurrencesArray[i][j]);
+
+                    if (result.Count == k) {
+                        return result.ToArray();
+                    }
+                }
+            }
+        }
+
+        return [];
+    }
+
     public static int[] TopKFrequent(int[] nums, int k)
     {
-        return TopKFrequentHashMapMaxHeap(nums, k);
+        return TopKFrequentBuckSort(nums, k);
     }
 
     static void Main(string[] args)
