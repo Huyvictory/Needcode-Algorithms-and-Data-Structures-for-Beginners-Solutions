@@ -55,12 +55,54 @@ class Program
         return s.Split("@@").ToList();
     }
 
+    // Using Length of each sub string approach with spaces
+    // TC: O(n), SC: O(1)
+    public string Encode2(IList<string> strs)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < strs.Count; i++)
+        {
+            stringBuilder.Append($"{strs[i].Length} {strs[i]} ");
+        }
+
+        return stringBuilder.ToString();
+    }
+
+    public List<string> Decode2(string s) {
+
+        var result = new List<string>();
+        string currentLengthSubString = string.Empty;
+
+        for (int i = 0; i < s.Length; i++) {
+            if (s[i] >= '0' && s[i] <= '9' && (s[i + 1] == ' ' || (s[i + 1] >= '0' && s[i + 1] <= '9'))) {
+                currentLengthSubString += s[i];
+                continue;
+            }
+            
+            else if (!string.IsNullOrEmpty(currentLengthSubString) && s[i] == ' ') {
+                result.Add(s.Substring(i + 1, int.Parse(currentLengthSubString)));
+                i += int.Parse(currentLengthSubString) + 1;
+
+                currentLengthSubString = "";
+            }
+        }
+
+        if (!string.IsNullOrEmpty(currentLengthSubString)) {
+            foreach (var c in currentLengthSubString)
+            {
+                result.Add("");
+            }
+        }
+
+        return result;
+    }
 
     static void Main(string[] args)
     {
         Program testProgram = new Program();
 
-        var decodedString = testProgram.Decode(testProgram.Encode(TestCase1()));
+        var decodedString = testProgram.Decode2(testProgram.Encode2(TestCase1()));
         
         return;
     }
