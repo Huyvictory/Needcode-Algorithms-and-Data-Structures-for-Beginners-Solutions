@@ -38,14 +38,44 @@ class Program
         return nums;
     }
 
+    public static int[] ProductExceptSelfPrefixPostfixSpaceOptimized(int[] nums) {
+        int[] res = new int[nums.Length];
+        Array.Fill(res, 1);
+
+        // Update recent prefix value for every element of result array
+        int recentPrefixValue = 1;
+
+        for (int i = 0; i < res.Length; i++)
+        {
+            // The prefix value of current element equals to the recent prefix value
+            res[i] = recentPrefixValue;
+
+            // Update the recent prefix value for next element
+            recentPrefixValue = nums[i] * recentPrefixValue;
+        }
+
+        int recentPostfixValue = 1;
+
+        for (int i = res.Length - 1; i >=0; i--) {
+
+            // Update the product of current element except itself
+            res[i] *= recentPostfixValue;
+
+            // Update the recent postfix value for next element
+            recentPostfixValue = nums[i] * recentPostfixValue;
+        }
+
+        return res;
+    }
+
     public static int[] ProductExceptSelf(int[] nums)
     {
-        return ProductExceptSelfPrefixPostfixProduct(nums);
+        return ProductExceptSelfPrefixPostfixSpaceOptimized(nums);
     }
 
     static void Main(string[] args)
     {
-        var result = ProductExceptSelf(TestCase2());
+        var result = ProductExceptSelf(TestCase1());
 
         return;
     }
