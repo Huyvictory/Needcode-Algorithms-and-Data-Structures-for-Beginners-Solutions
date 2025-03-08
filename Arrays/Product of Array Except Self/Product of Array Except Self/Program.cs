@@ -10,6 +10,7 @@ class Program
         return [-1,1,0,-3,3];
     }
 
+    // TC: O(N), SC: O(n)
     public static int[] ProductExceptSelfPrefixPostfixProduct(int[] nums)
     {
         int[] prefixProduct = new int[nums.Length];
@@ -38,6 +39,7 @@ class Program
         return nums;
     }
 
+    // TC: O(N), SC: O(1) if we don't count the res array, O(n) if we do
     public static int[] ProductExceptSelfPrefixPostfixSpaceOptimized(int[] nums) {
         int[] res = new int[nums.Length];
         Array.Fill(res, 1);
