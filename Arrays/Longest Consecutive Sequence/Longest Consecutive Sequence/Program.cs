@@ -66,11 +66,43 @@ class Program
     }
 
     // TC: O(n), SC: O(N)
-    
+    private static int LongestConsecutiveHashSetTimeOptimized(int[] nums)
+    {
+        if (nums.Length == 0) return 0;
+
+        // Create hash set that contains unique elements from original array
+        var set = new HashSet<int>(nums);
+
+        int maxConsecutiveSequence = 0;
+
+        foreach (var num in set)
+        {
+            int currentConsecutiveSequence = 0;
+            int currentNum = num;
+
+            // If the current number doesn't have any previous adjacent number
+            // That means the number is the starting point of increasing consecutive sequence
+            if (!set.Contains(currentNum - 1)) {
+
+                // Calculate the length of the current consecutive sequence
+                // If the length is greater than max then overrides it
+                while (set.Contains(currentNum)) {
+                    currentConsecutiveSequence++;
+                    currentNum++;
+                }
+
+                if (currentConsecutiveSequence > maxConsecutiveSequence) {
+                    maxConsecutiveSequence = currentConsecutiveSequence;
+                }
+            }   
+        }
+
+        return maxConsecutiveSequence;
+    }
 
     public static int LongestConsecutive(int[] nums)
     {
-        return LongestConsecutiveHashSet(nums);
+        return LongestConsecutiveHashSetTimeOptimized(nums);
     }
 
     static void Main(string[] args)
