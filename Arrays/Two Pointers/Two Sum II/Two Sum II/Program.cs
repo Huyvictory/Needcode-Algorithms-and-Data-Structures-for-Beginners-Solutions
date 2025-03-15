@@ -14,6 +14,37 @@ class Program
         return ([-1,0], -1);
     }
 
+    // Using two pointers that go opposite ways
+    // For every iteration of two pointers
+    // If sum of two pointers element is greater than target, that means the upper bound is too large
+    // we need to reduce the right pointer
+    // Otherwise, the sum is smaller indicating the lower bound is too small then we need to increase the left pointer
+
+    // TC: O(n), SC: O(1)
+    private static int[] TwoSumTwoPointers(int[] numbers, int target)
+    {
+        int left = 0;
+        int right = numbers.Length - 1;
+
+        while (left < right)
+        {
+            if (numbers[left] + numbers[right] > target)
+            {
+                right--;
+            }
+            else if (numbers[left] + numbers[right] < target)
+            {
+                left++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return new int[] { left + 1, right + 1 };
+    }
+
     // For every single element in outer loop iteration
     // We would have another loop running inside to check for every possible pairs that could sum up to target
 
@@ -38,12 +69,12 @@ class Program
 
     public static int[] TwoSum(int[] numbers, int target)
     {
-        return TwoSumBruteForce(numbers, target);
+        return TwoSumTwoPointers(numbers, target);
     }
 
     static void Main(string[] args)
     {
-        var result = TwoSum(TestCase3().numbers, TestCase3().target);
+        var result = TwoSum(TestCase1().numbers, TestCase1().target);
 
         return;
     }
