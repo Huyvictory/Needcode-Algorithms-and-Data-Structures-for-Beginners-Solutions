@@ -78,11 +78,68 @@ class Program
         return result;
     }
 
-    
+    private static IList<IList<int>> ThreeSumTwoPointersSortedOptimized(int[] nums)
+    {
+        // Sort the input array first
+        Array.Sort(nums);
+
+        // A result that contains every distinct triplets;
+        var result = new List<IList<int>>();
+
+        // Iterate every element in outer loop
+        // Run inside loop that check for every pairs of element
+        // that possibly sum up to current element with result of 0
+
+        // TC: O(n^2), SC: O(c)
+        for (int i = 0; i < nums.Length; i++)
+        {
+            // If the next element is the same as the previous one that we just checked all possible triplets
+            // then we will skip it
+            if (i > 0 && nums[i- 1] == nums[i]) {
+                continue;
+            }
+
+            int left = i + 1;
+            int right = nums.Length - 1;
+
+            // Continue checking sum if these two pointers haven't met each other
+            while (left < right)
+            {
+                int sum = nums[i] + nums[left] + nums[right];
+
+                // Upper bound too high
+                if (sum > 0)
+                {
+                    right--;
+                }
+                // Lower bound too low
+                else if (sum < 0)
+                {
+                    left++;
+                }
+                else
+                {
+                    result.Add(new int[] {nums[i], nums[left], nums[right]});
+
+                    // Continue lookup for every possible pair by shifting left pointer to check duplicate
+                    // If left pointer after moving and still find the exact element as before
+                    // Then we continue shifting it, to avoid duplicate triplets
+                    left++;
+
+                    while (left < right && nums[left] == nums[left - 1])
+                    {
+                        left++;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }    
 
     public static IList<IList<int>> ThreeSum(int[] nums)
     {
-        return ThreeSumTwoPointersSorted(nums);
+        return ThreeSumTwoPointersSortedOptimized(nums);
     }
 
     static void Main(string[] args)
