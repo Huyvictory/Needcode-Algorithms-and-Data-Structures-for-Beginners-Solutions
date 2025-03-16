@@ -47,9 +47,46 @@ class Program
         return maxArea;
     }
 
+    // TC: O(n), SC: O(1)
+    private static int MaxAreaTwoPointersOpposite(int[] height)
+    {
+        // Initialize the two pointers starting at start and end of height array
+        int left = 0;
+        int right = height.Length - 1;
+
+        // Initialize the max area variable as output result
+        int maxArea = 0;
+
+        // Calculate area container for each 2 pointers iteration
+        while (left < right)
+        {
+            // Calculate distance on x plane
+            int xDistance = right + 1 - (left + 1);
+
+            // Calculate the current area
+            int area = Math.Min(height[right], height[left]) * xDistance;
+
+            // Override the area if the calculated area is larger than the maxArea itself
+            maxArea = Math.Max(maxArea, area);
+
+            // Shift one of two pointers if element at that pointer is smaller
+            // So that we might find next element that is bigger than the previous one along with suitable x distance
+            // It could also potentially gives out area result that has higher value than the current one
+            if (height[left] < height[right]) {
+                left++;
+            }
+            else {
+                right--;
+            }
+            
+        }
+
+        return maxArea;
+    }
+
     public static int MaxArea(int[] height)
     {
-        return MaxAreaBruteForce(height);
+        return MaxAreaTwoPointersOpposite(height);
     }
 
     static void Main(string[] args)
