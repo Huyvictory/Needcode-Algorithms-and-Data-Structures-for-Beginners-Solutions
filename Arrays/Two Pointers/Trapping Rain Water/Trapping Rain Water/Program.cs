@@ -51,10 +51,40 @@ class Program
         return res;
     }
 
+    // TC: O(n), SC: O(1)
+    private static int TrapTwoPointers(int[] height) {
+        int maxLeft = height[0];
+        int maxRight = height[height.Length - 1];
+
+        int left = 0;
+        int right = height.Length - 1;
+        int res = 0;
+
+        while (left < right) {
+            if (maxLeft < maxRight) {
+                left++;
+
+                // Make sure the prefix max left is always greater or equal element at moved left pointer
+                // to avoid negative number
+                maxLeft = Math.Max(maxLeft, height[left]);
+                res += maxLeft - height[left];
+            }
+            else {
+                right--;
+
+                // Make sure the suffix max right is always greater or equal element at moved right pointer
+                // to avoid negative number
+                maxRight = Math.Max(maxRight, height[right]);
+                res += maxRight - height[right];
+            }
+        }
+
+        return res;
+    }
 
     public static int Trap(int[] height)
     {
-        return TrapPrefixSuffixArray(height);
+        return TrapTwoPointers(height);
     }
 
     static void Main(string[] args)
