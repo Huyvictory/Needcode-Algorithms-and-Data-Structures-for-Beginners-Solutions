@@ -57,9 +57,49 @@ class Program
         GenerateParenthesesBruteForce(n, builtString + ")");
     }
 
+    // TC: O(4^n / sqrt(n)), SC: O(n)
+    private static void GenerateParenthesesBacktrack(
+        int n,
+        string builtString,
+        int numOpen,
+        int numClose
+    )
+    {
+        // If the number of open parentheses is larger than n pairs
+        // which means the open parentheses number is redundant and it is not a valid combination
+        if (numOpen > n)
+        {
+            return;
+        }
+
+        // If the number of close parentheses is greater than open parentheses then it is not valid combination
+        // as there isn't enough open parentheses to close
+        if (numClose > numOpen)
+        {
+            return;
+        }
+
+        // Base case built string has valid number of open and close parentheses
+        if (builtString.Length == (2 * n))
+        {
+            parenthesesCombinations.Add(builtString);
+            return;
+        }
+
+        numOpen++;
+        GenerateParenthesesBacktrack(n, builtString + "(", numOpen, numClose);
+
+        // Back track the number of open parentheses to go back to each previous state in the decision tree
+        numOpen--;
+
+        numClose++;
+        GenerateParenthesesBacktrack(n, builtString + ")", numOpen, numClose);
+    }
+
     public static IList<string> GenerateParenthesis(int n)
     {
-        GenerateParenthesesBruteForce(n, "");
+        // GenerateParenthesesBruteForce(n, "");
+        GenerateParenthesesBacktrack(n, "", 0, 0);
 
         return parenthesesCombinations;
     }
