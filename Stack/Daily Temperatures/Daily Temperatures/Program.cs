@@ -39,9 +39,37 @@ class Program
         return answer;
     }
 
+    // TC: O(n), SC: O(n)
+    private static int[] DailyTemperaturesMonotonicDecreasingStack(int[] temperatures) {
+        int[] answer = new int[temperatures.Length];
+
+        Stack<(int element, int index)> monotonicDecreasingStack = new Stack<(int element, int index)>();
+
+        // a monotonic stack than only contains element in decreasing order
+        monotonicDecreasingStack.Push((temperatures[0], 0));
+
+        // Traverse each element in original array and check the current element with element at top stack
+        // if current element is larger then it doesn't suit the stack characteristic.
+        // Then we continue to pop every single element in the stack until it matches decreasing order.
+        for (int i = 0; i < temperatures.Length; i++)
+        {
+            // Pop to maintain the decreasing order of the stack
+            while (monotonicDecreasingStack.Count > 0 && temperatures[i] > monotonicDecreasingStack.Peek().element) {
+                var topStackElement = monotonicDecreasingStack.Pop();
+
+                // Calculate the number of waiting days between the element at top stack and current iteration element
+                answer[topStackElement.index] = i - topStackElement.index;
+            }
+
+            monotonicDecreasingStack.Push((temperatures[i], i));
+        }
+
+        return answer;
+    }
+
     public static int[] DailyTemperatures(int[] temperatures)
     {
-        return DailyTemperaturesBruteForce(temperatures);
+        return DailyTemperaturesMonotonicDecreasingStack(temperatures);
     }
 
     static void Main(string[] args)
