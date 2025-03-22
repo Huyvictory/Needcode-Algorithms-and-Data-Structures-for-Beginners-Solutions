@@ -53,9 +53,49 @@ class Program
         return ans;
     }
 
+    // TC: O(n^2), SC: O(n)
+    private static int[] NextGreaterElementHashMap(int[] nums1, int[] nums2) {
+        // Save every element and its index in a hashmap of array nums2
+        var map = new Dictionary<int, int>();
+
+        int[] ans = new int[nums1.Length];
+
+        for (int i = 0; i < nums2.Length; i++)
+        {
+            map.Add(nums2[i], i);
+        }
+
+        // Iterate element of nums1
+        // Get same element in nums2 through map and find its next greater element in nums2
+        for (int i = 0; i < nums1.Length; i++)
+        {
+            // Index to find next greater element of current element in array nums2
+            var indexFinding = map[nums1[i]];
+
+            bool hasFoundNextGreaterElement = false;
+
+            for (int j = indexFinding + 1; j < nums2.Length; j++)
+            {
+                if (nums2[j] > nums1[i]) {
+                    ans[i] = nums2[j];
+                    hasFoundNextGreaterElement = true;
+                    break;
+                }
+            }
+
+            if (!hasFoundNextGreaterElement) {
+                ans[i] = -1;
+            }
+
+        }
+
+        return ans;
+    }
+
     public static int[] NextGreaterElement(int[] nums1, int[] nums2)
     {
-        return NextGreaterElementBruteForce(nums1, nums2);
+        // return NextGreaterElementBruteForce(nums1, nums2);
+        return NextGreaterElementHashMap(nums1, nums2);
     }
 
     static void Main(string[] args)
