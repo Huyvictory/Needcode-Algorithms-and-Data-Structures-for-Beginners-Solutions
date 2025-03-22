@@ -10,6 +10,10 @@ class Program
         return (nums1: [2,4], nums2: [1,2,3,4]);
     }
 
+    private static (int[] nums1, int[] nums2) TestCase3() {
+        return (nums1: [1,3,5,2,4], nums2: [6,5,4,3,2,1,7]);
+    }
+
     // TC: O(n^3), SC: O(n)
     private static int[] NextGreaterElementBruteForce(int[] nums1, int[] nums2)
     {
@@ -92,15 +96,64 @@ class Program
         return ans;
     }
 
+    // TC: O(n^2), SC: O(n)
+    private static int[] NextGreaterElementMonotonicDecreasingStack(int[] nums1, int[] nums2) {
+        // init map that contains all elements and its indexes of nums1 array
+        var map = new Dictionary<int,int>();
+        int[] ans = new int[nums1.Length];
+
+        for (int i = 0; i < nums1.Length; i++)
+        {
+            map.Add(nums1[i], i);
+        }
+
+        // init monotonic stack that only contains elements that is smaller
+        Stack<int> monotonicDecreasingStack = new Stack<int>(){};
+
+        monotonicDecreasingStack.Push(nums2[0]);
+        int index = 1;
+
+        // Iterate every element in array nums2 
+        // and find nearest larger element for every single element in stack
+        while (index < nums2.Length) {
+
+            // If we have found the nearest larger element for some elements in stack
+            while (monotonicDecreasingStack.Count > 0 && nums2[index] > monotonicDecreasingStack.Peek()) {
+                // If the element is in both array nums1, nums2 then update the ans array result
+                if (map.ContainsKey(monotonicDecreasingStack.Peek()))
+                {
+                    ans[map[monotonicDecreasingStack.Peek()]] = nums2[index];
+                }
+                monotonicDecreasingStack.Pop();
+            }
+            monotonicDecreasingStack.Push(nums2[index]);
+            
+            index++;
+        }
+
+        while (monotonicDecreasingStack.Count > 0) {
+            // If the element is in both arrays nums1 and nums2
+            // And it doesn't have the nearest larger element then update result with -1
+            if (map.ContainsKey(monotonicDecreasingStack.Peek())) {
+                ans[map[monotonicDecreasingStack.Peek()]] = -1;
+            }
+
+            monotonicDecreasingStack.Pop();
+        }
+
+        return ans;
+    }
+
     public static int[] NextGreaterElement(int[] nums1, int[] nums2)
     {
         // return NextGreaterElementBruteForce(nums1, nums2);
-        return NextGreaterElementHashMap(nums1, nums2);
+        // return NextGreaterElementHashMap(nums1, nums2);
+        return NextGreaterElementMonotonicDecreasingStack(nums1, nums2);
     }
 
     static void Main(string[] args)
     {
-        var result = NextGreaterElement(TestCase2().nums1, TestCase2().nums2);
+        var result = NextGreaterElement(TestCase1().nums1, TestCase1().nums2);
 
         return;
     }
