@@ -60,9 +60,50 @@ class Program
         return maxArea;
     }
 
+    // TC: O(n), SC: O(n)
+    private static int LargestRectangleAreaStack(int[] heights)
+    {
+        int maxArea = 0;
+
+        // Stack that contains only bar elements that are in increasing order
+        Stack<(int startIndex, int height)> stackMax = new Stack<(int startIndex, int height)>();
+
+        for (int i = 0; i < heights.Length; i++)
+        {
+            // Init index to push into stack of current element
+            int index = i;
+
+            // If elements in stack is greater than the current element
+            // that means the rectangular histogram's width is restricted by lower bound of current element
+            while (stackMax.Count > 0 && stackMax.Peek().height > heights[i]) {
+                var barTopStack = stackMax.Pop();
+
+                maxArea = Math.Max(maxArea, barTopStack.height * (i - barTopStack.startIndex));
+
+                // If current element is smaller than elements at old top stack
+                // That means the width of rectangular histogram can be extended from the popped elements at top stack
+                // to current element and might be to the end of the list
+                index = barTopStack.startIndex;
+            }
+
+            stackMax.Push((index, heights[i]));
+        }
+
+        // Stack still have some increasing bar height value, compute the area of those and compare to max value
+        while (stackMax.Count > 0) {
+            var barTopStack = stackMax.Pop();
+
+            int area = barTopStack.height * (heights.Length - barTopStack.startIndex);
+            maxArea = Math.Max(maxArea, area);
+        }
+
+        return maxArea;
+    }
+
     public static int LargestRectangleArea(int[] heights)
     {
-        return LargestRectangleAreaBruteForce(heights);
+        // return LargestRectangleAreaBruteForce(heights);
+        return LargestRectangleAreaStack(heights);
     }
 
     static void Main(string[] args)
