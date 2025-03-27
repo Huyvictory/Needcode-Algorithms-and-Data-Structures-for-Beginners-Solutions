@@ -47,6 +47,36 @@ class Program
         return new int[] { 34392671, 891616382, 813261297, };
     }
 
+    // TC: O(m *n), SC: O(1)
+    public static int MinEatingSpeedBruteForce(int[] piles, int h)
+    {
+        int speed = 0;
+
+        int minSpeed = 1;
+        int maxSpeed = piles.Max();
+
+        while (minSpeed <= maxSpeed)
+        {
+            int TakenTime = 0;
+
+            foreach (var pile in piles)
+            {
+                TakenTime += (int)Math.Ceiling((decimal)pile / minSpeed);
+            }
+
+            // If recent min speed has taken time that is still within h range
+            if (TakenTime <= h)
+            {
+                speed = minSpeed;
+                break;
+            }
+
+            minSpeed++;
+        }
+
+        return speed;
+    }
+
     public static bool HasKokoEatenAllBananas(int speed, int[] piles, int limit)
     {
         int timeSpent = 0;
@@ -55,7 +85,7 @@ class Program
         {
             timeSpent += (int)Math.Ceiling((decimal)piles[i] / speed);
 
-            if (timeSpent > limit)
+            if (timeSpent > limit || timeSpent < 0)
             {
                 return false;
             }
@@ -64,7 +94,7 @@ class Program
         return true;
     }
 
-    public static int MinEatingSpeed(int[] piles, int h)
+    public static int MinEatingSpeedBinarySearch(int[] piles, int h)
     {
         int left = 1;
         int right = piles.Max();
@@ -86,6 +116,12 @@ class Program
         }
 
         return k;
+    }
+
+    public static int MinEatingSpeed(int[] piles, int h)
+    {
+        return MinEatingSpeedBinarySearch(piles, h);
+        // return MinEatingSpeedBruteForce(piles, h);
     }
 
     static void Main(string[] args)
