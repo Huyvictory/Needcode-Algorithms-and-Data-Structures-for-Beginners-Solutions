@@ -22,6 +22,14 @@ class Program
         return [266,267,268,269,271,278,282,292,293,298,6,9,15,19,21,26,33,35,37,38,39,46,49,54,65,71,74,77,79,82,83,88,92,93,94,97,104,108,114,115,117,122,123,127,128,129,134,137,141,142,144,147,150,154,160,163,166,169,172,173,177,180,183,184,188,198,203,208,210,214,218,220,223,224,233,236,241,243,253,256,257,262,263];
     }
 
+    private static int[] TestCase6() {
+        return [1,2,4,5,6,7,8,9,0];
+    }
+
+    private static int[] TestCase7() {
+        return [7,0,1,2,3,4,5,6];
+    }
+
     // TC: O(logn), SC: O(1)
     private static int FindMinBinarySearch(int[] nums)
     {
@@ -66,13 +74,46 @@ class Program
         return nums[left];
     }
 
+    // TC: O(logn), SC: O(1)
+    private static int FindMinBinarySearchShortened(int[] nums) {
+        int left = 0;
+        int right = nums.Length - 1;
+
+        int res = nums[0];
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            res = Math.Min(res, nums[mid]);
+
+            // If left and mid pointers both are in bigger sub array then we search on the right
+            if (nums[left] <= nums[mid] && nums[mid] > nums[right] && nums[left] > nums[right]) {
+                left = mid + 1;
+            }
+
+            // If right and mid pointer both are in smaller sub array then we search on the left
+            else if (nums[left] >= nums[mid] && nums[left] > nums[right]){
+                right = mid - 1;
+            }
+
+            // If left mid pointer are both in smaller sub array then find the smaller element
+            else if (nums[left] < nums[right]) {
+                res = Math.Min(res, nums[mid]);
+                break;
+            }
+        }
+
+        return Math.Min(res, nums[left]);
+    }
+
     public static int FindMin(int[] nums)
     {
-        return FindMinBinarySearch(nums);
+        // return FindMinBinarySearch(nums);
+        return FindMinBinarySearchShortened(nums);
     }
 
     static void Main(string[] args)
     {
-        Console.WriteLine(FindMin(TestCase5()));
+        Console.WriteLine(FindMin(TestCase1()));
     }
 }
