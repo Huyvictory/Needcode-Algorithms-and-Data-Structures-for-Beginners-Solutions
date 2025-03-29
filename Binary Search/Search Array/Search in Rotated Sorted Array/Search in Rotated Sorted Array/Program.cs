@@ -114,9 +114,69 @@ class Program
         return res;
     }
 
+    private static int InternalBinarySearch(int[]nums, int target, int left, int right) {
+        int res = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] > target) {
+                right = mid - 1;
+            } 
+            else if (nums[mid] < target) {
+                left = mid + 1;
+            }
+            else {
+                res = mid;
+                break;
+            }
+        }
+
+        return res;
+    }
+
+    // TC: O(logn), SC: O(1)
+    private static int SearchBinarySearchPivot(int[] nums, int target)
+    {
+        int pivot = 0;
+
+        int left = 0;
+        int right = nums.Length - 1;
+
+        // Binary search to find the pivot
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // mid at left most sub array
+            if (nums[mid] > nums[right]) {
+                pivot = mid + 1;
+                left = mid + 1;
+            }
+
+            // mid at right most sub array
+            else if (nums[mid] <= nums[right]) {
+                right = mid;
+            }
+        }
+
+        int res;
+        
+        res = InternalBinarySearch(nums, target, 0, pivot - 1);
+        
+        if (res != -1) {
+            return res;
+        }
+        else
+        {
+            res = InternalBinarySearch(nums, target, pivot, nums.Length - 1);
+        }
+
+        return res;
+    }
+
     public static int Search(int[] nums, int target)
     {
-        return SearchBinarySearch(nums, target);
+        return SearchBinarySearchPivot(nums, target);
     }
 
     static void Main(string[] args)
