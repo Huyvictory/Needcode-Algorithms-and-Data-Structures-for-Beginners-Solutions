@@ -27,6 +27,11 @@ class Program
         return ("hello", "ooolleoooleh");
     }
 
+    private static (string s1, string s2) TestCase6()
+    {
+        return ("abc", "bbbca");
+    }
+
     private static bool CheckInclusionSlidingWindow(string s1, string s2)
     {
         // a string is a permutation of another string
@@ -160,14 +165,105 @@ class Program
         return false;
     }
 
+    // TC: O(n), SC: O(1)
+    private static bool CheckInclusionWindowFixedSizeOptimized(string s1, string s2)
+    {
+        if (s1.Length > s2.Length)
+            return false;
+
+        var mapS1 = new Dictionary<char, int>();
+        var mapS2 = new Dictionary<char, int>();
+
+        // Count number of character occurrences in first window of size s1 string
+        // Through array of characters in string s1
+        for (int i = 0; i < s1.Length; i++)
+        {
+            if (!mapS1.ContainsKey(s1[i]))
+            {
+                mapS1.Add(s1[i], 1);
+            }
+            else
+            {
+                mapS1[s1[i]]++;
+            }
+
+            if (!mapS2.ContainsKey(s2[i]))
+            {
+                mapS2.Add(s2[i], 1);
+            }
+            else
+            {
+                mapS2[s2[i]]++;
+            }
+        }
+
+        // Create a matches variable to check if the current window has exact 26 matches
+        // Meaning if has the same number of every character occurrences in mapS1 vs mapS2
+        var matches = 0;
+
+        for (int i = 0; i < 26; i++)
+        {
+            if (!mapS1.ContainsKey((char)(i + 97)))
+            {
+                mapS1.Add((char)(i + 97), 0);
+            }
+
+            if (!mapS2.ContainsKey((char)(i + 97)))
+            {
+                mapS2.Add((char)(i + 97), 0);
+            }
+
+            if (mapS1[(char)(i + 97)] == mapS2[(char)(i + 97)])
+            {
+                matches++;
+            }
+        }
+
+        int left = 0;
+        // We check for other next sliding windows if there is any that could make the occurrences hash table
+        // between these two strings equals 26
+        for (int right = s1.Length; right < s2.Length; right++)
+        {
+            if (matches == 26)
+                return true;
+
+            mapS2[s2[right]]++;
+
+            if (mapS1[s2[right]] + 1 == mapS2[s2[right]])
+            {
+                matches--;
+            }
+            else if (mapS1[s2[right]] == mapS2[s2[right]])
+            {
+                matches++;
+            }
+
+            mapS2[s2[left]]--;
+
+            if (mapS1[s2[left]] - 1 == mapS2[s2[left]])
+            {
+                matches--;
+            }
+            else if (mapS1[s2[left]] == mapS2[s2[left]])
+            {
+                matches++;
+            }
+
+            left++;
+        }
+
+        return matches == 26;
+    }
+
     public static bool CheckInclusion(string s1, string s2)
     {
         // return CheckInclusionSlidingWindow(s1, s2);
-        return CheckInclusionSlidingWindowFixedSize(s1, s2);
+        // return CheckInclusionSlidingWindowFixedSize(s1, s2);
+        return CheckInclusionWindowFixedSizeOptimized(s1, s2);
     }
 
     static void Main(string[] args)
     {
-        Console.WriteLine(CheckInclusion(TestCase4().s1, TestCase4().s2));
+        Console.WriteLine(CheckInclusion(TestCase6().s1, TestCase6().s2));
     }
 }
