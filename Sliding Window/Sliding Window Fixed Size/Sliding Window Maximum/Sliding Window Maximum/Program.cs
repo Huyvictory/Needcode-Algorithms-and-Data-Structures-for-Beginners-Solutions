@@ -42,11 +42,46 @@ class Program
         return result.ToArray();
     }
 
-    
+    // TC: O(n), SC: O(n)
+    private static int[] MaxSlidingWindowDequeue(int[] nums, int k)
+    {
+        List<(int num, int index)> dequeue = new List<(int num, int index)>();
+        List<int> ans = new List<int>();
+
+        // Pointer to trace the max of many sliding windows
+        int left = 0;
+
+        for (int right = 0; right < nums.Length; right++)
+        {
+            // If we meet next max value in next sliding window position
+            // Update the queue to only contains max element of every sliding window
+            while (dequeue.Count > 0 && nums[right] > dequeue.Last().num) {
+                dequeue.RemoveAt(dequeue.Count - 1);
+            }
+
+            dequeue.Add((nums[right], right));
+
+            // Check if current max is at the current sliding window
+            // If not then remove that element to update the correct max value of current sliding window
+            if (left > dequeue.First().index) {
+                dequeue.RemoveAt(0);
+            }
+
+            // Check if current element has form a sliding window or not
+            if (right + 1 >= k) {
+                ans.Add(dequeue.First().num);
+
+                left++;
+            }
+        }
+
+        return ans.ToArray();
+    }
 
     public static int[] MaxSlidingWindow(int[] nums, int k)
     {
-        return MaxSlidingWindowBruteForce(nums, k);
+        // return MaxSlidingWindowBruteForce(nums, k);
+        return MaxSlidingWindowDequeue(nums, k);
     }
 
     static void Main(string[] args)
