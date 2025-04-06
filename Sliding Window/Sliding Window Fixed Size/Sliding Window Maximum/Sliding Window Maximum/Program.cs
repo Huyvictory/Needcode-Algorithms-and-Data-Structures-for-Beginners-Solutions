@@ -78,10 +78,41 @@ class Program
         return ans.ToArray();
     }
 
+    // TC: O(nlogn), SC: O(n)
+    private static int[] MaxSlidingWindowMaxHeap(int[] nums, int k)
+    {
+        var priorityQueue = new PriorityQueue<(int num, int index), int>();
+
+        int[] ans = new int[nums.Length - k + 1];
+        int left = 0;
+
+        for (int right = 0; right < nums.Length; right++)
+        {
+            priorityQueue.Enqueue((nums[right], right), -nums[right]);
+
+            // If the current right pointer is in a new sliding window
+            if (right + 1 >= k) {
+                // If the current max value is not in the current sliding window position
+                while (left > priorityQueue.Peek().index) {
+                    priorityQueue.Dequeue();
+                }
+
+                // assign max of the current sliding window
+                ans[left] = priorityQueue.Peek().num;
+
+                // move to next max of next sliding window
+                left++;
+            }
+        }
+
+        return ans;
+    }
+
     public static int[] MaxSlidingWindow(int[] nums, int k)
     {
         // return MaxSlidingWindowBruteForce(nums, k);
-        return MaxSlidingWindowDequeue(nums, k);
+        // return MaxSlidingWindowDequeue(nums, k);
+        return MaxSlidingWindowMaxHeap(nums, k);
     }
 
     static void Main(string[] args)
