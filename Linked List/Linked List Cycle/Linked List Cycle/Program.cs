@@ -75,9 +75,36 @@ class Program
         return false;
     }
 
+    // TC: O(n), SC: O(n)
+    private static bool HasCycleHasSet(ListNode head)
+    {
+        if (head == null || head.next == null)
+            return false;
+
+        HashSet<ListNode> set = new HashSet<ListNode>();
+
+        ListNode curNode = head;
+
+        while (curNode != null && curNode.next != null)
+        {
+            if (!set.Contains(curNode))
+            {
+                set.Add(curNode);
+                curNode = curNode.next;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static bool HasCycle(ListNode head)
     {
-        return HasCycleFastSlowPointers(head);
+        // return HasCycleFastSlowPointers(head);
+        return HasCycleHasSet(head);
     }
 
     static void Main(string[] args)
