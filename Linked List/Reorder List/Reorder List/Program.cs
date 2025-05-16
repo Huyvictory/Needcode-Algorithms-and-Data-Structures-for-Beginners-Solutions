@@ -94,13 +94,59 @@ class Program
         return;
     }
 
+    // TC: O(n), SC: O(1)
+    private static void ReorderListFastSlowPointers(ListNode head)
+    {
+        // Partition original linked list using fast and slow pointers
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        while (fast != null && fast.next != null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode second = slow.next;
+        // Reset the reference pointers of second half of the original linked list
+        ListNode prev = slow.next = null;
+
+        // Reverse the reference pointers of the second right half
+        while (second != null)
+        {
+            ListNode tmp = second.next;
+            second.next = prev;
+            prev = second;
+            second = tmp;
+        }
+
+        // We would have two half
+        // One left half is the unmodified linked list and need merging from second right half
+        // One right half is the reversed pointer reference linked list
+        ListNode first = head;
+        second = prev;
+
+        while (second != null)
+        {
+            ListNode tmp1 = first.next;
+            ListNode tmp2 = second.next;
+            first.next = second;
+            second.next = tmp1;
+            first = tmp1;
+            second = tmp2;
+        }
+
+        return;
+    }
+
     public static void ReorderList(ListNode head)
     {
-        ReorderListTwoPointers(head);
+        // ReorderListTwoPointers(head);
+        ReorderListFastSlowPointers(head);
     }
 
     static void Main(string[] args)
     {
-        ReorderList(TestCase5());
+        ReorderList(TestCase1());
     }
 }
