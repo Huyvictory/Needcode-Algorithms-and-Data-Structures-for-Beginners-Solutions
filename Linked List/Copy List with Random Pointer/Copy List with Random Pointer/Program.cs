@@ -57,7 +57,7 @@ class Program
     }
 
     // TC: O(n), SC: O(n)
-    private static Node CopyRandomListHashMap(Node head)
+    private static Node CopyRandomListHashMapTwoPass(Node head)
     {
         if (head == null)
             return null;
@@ -102,14 +102,63 @@ class Program
         return newHead;
     }
 
+    // TC: O(n), SC: O(n)
+    private static Node CopyRandomListHashMapOnePass(Node head)
+    {
+        // Map to store references object of old node and new node
+        Dictionary<Node, Node> map = new Dictionary<Node, Node>();
+
+        var cur = head;
+
+        while (cur != null)
+        {
+            if (!map.ContainsKey(cur))
+            {
+                map.Add(cur, new Node(cur.val));
+            }
+            // Override the exiting pair node value in both old new linked list
+            else
+            {
+                map[cur].val = cur.val;
+            }
+
+            // If current node has next pointer reference
+            if (cur.next != null)
+            {
+                if (!map.ContainsKey(cur.next))
+                {
+                    map.Add(cur.next, new Node(0));
+                }
+
+                map[cur].next = map[cur.next];
+            }
+
+            // If current node has random pointer reference
+            if (cur.random != null)
+            {
+                if (!map.ContainsKey(cur.random))
+                {
+                    map.Add(cur.random, new Node(0));
+                }
+
+                map[cur].random = map[cur.random];
+            }
+
+            cur = cur.next;
+        }
+
+        return head != null ? map[head] : null;
+    }
+
     public static Node CopyRandomList(Node head)
     {
-        return CopyRandomListHashMap(head);
+        // return CopyRandomListHashMapTwoPass(head);
+        return CopyRandomListHashMapOnePass(head);
     }
 
     static void Main(string[] args)
     {
-        var result = CopyRandomList(TestCase4());
+        var result = CopyRandomList(TestCase1());
 
         return;
     }
