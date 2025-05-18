@@ -79,14 +79,52 @@ class Program
         return head;
     }
 
+    // TC: O(n), SC: O(1)
+    private static ListNode RemoveNthFromEndTwoPointersNDistance(ListNode head, int n)
+    {
+        if (head.next == null && n == 1)
+        {
+            return null;
+        }
+
+        ListNode first = head;
+        ListNode second = head;
+
+        // Make first pointer to have n distance with second pointer
+        while (n > 0)
+        {
+            first = first.next;
+            n--;
+        }
+
+        while (first != null && first.next != null)
+        {
+            first = first.next;
+            second = second.next;
+        }
+
+        // Check whether node to delete is at the end or middle linked list
+        if (first != null)
+        {
+            second.next = second.next.next;
+        }
+        else
+        {
+            head = second.next;
+        }
+
+        return head;
+    }
+
     public static ListNode RemoveNthFromEnd(ListNode head, int n)
     {
-        return RemoveNthFromEndCounting2Pass(head, n);
+        // return RemoveNthFromEndCounting2Pass(head, n);
+        return RemoveNthFromEndTwoPointersNDistance(head, n);
     }
 
     static void Main(string[] args)
     {
-        var result = RemoveNthFromEnd(TestCase1(), 1);
+        var result = RemoveNthFromEnd(TestCase1(), 2);
 
         return;
     }
