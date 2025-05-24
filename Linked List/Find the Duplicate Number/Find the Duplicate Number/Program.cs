@@ -85,12 +85,49 @@ class Program
 
         return -1;
      }
+     
+    // TC: O(n), SC: O(1)
+    private static int FindDuplicateFastAndSlowPointers(int[] nums)
+    {
+        int slow = 0, fast = 0;
+
+        // Shift pointers to move to the number position it is referencing to
+        while (true)
+        {
+            // Slow pointer shift one time
+            slow = nums[slow];
+
+            // Fast pointer shift twice
+            fast = nums[nums[fast]];
+
+            // Two pointers detected cycle then stop the loop
+            if (slow == fast)
+            {
+                break;
+            }
+        }
+
+        // Initialize the second slow pointer to detect the duplicated number
+        int slow2 = 0;
+
+        while (true)
+        {
+            slow = nums[slow];
+            slow2 = nums[slow2];
+
+            if (slow == slow2)
+            {
+                return slow;
+            }
+        }
+    }
 
     public static int FindDuplicate(int[] nums)
     {
         // return FindDuplicateBruteForce(nums);
         // return FindDuplicateHashSet(nums);
-        return FindDuplicateNegativeMarking(nums);
+        // return FindDuplicateNegativeMarking(nums);
+        return FindDuplicateFastAndSlowPointers(nums);
     }
 
     static void Main(string[] args)
