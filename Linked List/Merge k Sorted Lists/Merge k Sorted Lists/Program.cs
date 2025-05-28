@@ -26,6 +26,25 @@ class Program
         return new ListNode[] { head1, head1_2, head2, };
     }
 
+    private static ListNode[] TestCase2()
+    {
+        var head1_1 = new ListNode(1);
+        var head1_2 = new ListNode(2);
+        var head1_2_1 = new ListNode(2);
+
+        head1_1.next = head1_2;
+        head1_2.next = head1_2_1;
+
+        var head2_1 = new ListNode(1);
+        var head2_1_2 = new ListNode(1);
+        var head2_2 = new ListNode(2);
+
+        head2_1.next = head2_1_2;
+        head2_1_2.next = head2_2;
+
+        return new ListNode[] { head1_1, head2_1 };
+    }
+
     private static ListNode MergeTwoLinkedLists(ListNode linkedListLeft, ListNode linkedListRight)
     {
         // Head of the merged sorted linked list
@@ -65,7 +84,7 @@ class Program
         return headMergedSortedLinkedList.next;
     }
 
-    // TC: O(nlogk), SC: O(k)
+    // TC: O(nlogk), SC: O(logk)
     private static ListNode MergeKListsMergeSort(ListNode[] lists, int start, int end)
     {
         if (lists.Length == 0)
@@ -103,15 +122,78 @@ class Program
         return lists[lists.Length - 1];
     }
 
+    // TC: O(klogn + n), SC: O(n)
+    private static ListNode MergeKListsHeap(ListNode[] lists)
+    {
+        if (lists.Length == 0)
+            return null;
+
+        var queue = new PriorityQueue<ListNode, int>();
+
+        // Enqueue every single node of every linked list into priority queue
+        foreach (var linkedList in lists)
+        {
+            if (linkedList != null)
+                queue.Enqueue(linkedList, linkedList.val);
+        }
+
+        ListNode res = new ListNode(0);
+        var resCur = res;
+
+        while (queue.Count > 0)
+        {
+            var dequeuedNode = queue.Dequeue();
+
+            resCur.next = dequeuedNode;
+            resCur = resCur.next;
+
+            if (dequeuedNode.next != null)
+                queue.Enqueue(dequeuedNode.next, dequeuedNode.next.val);
+        }
+
+        return res.next;
+    }
+
+    // TC: O(klogn + n), SC: O(n)
+    private static ListNode MergeKListsHeap2(ListNode[] lists)
+    {
+        var queue = new PriorityQueue<ListNode, int>();
+
+        // Enqueue every single node of every linked list into priority queue
+        foreach (var linkedList in lists)
+        {
+            var curLinkedList = linkedList;
+
+            while (curLinkedList != null)
+            {
+                queue.Enqueue(new ListNode(curLinkedList.val), curLinkedList.val);
+                curLinkedList = curLinkedList.next;
+            }
+        }
+
+        ListNode res = new ListNode(0);
+        var resCur = res;
+
+        while (queue.Count > 0)
+        {
+            resCur.next = queue.Dequeue();
+            resCur = resCur.next;
+        }
+
+        return res.next;
+    }
+
     public static ListNode MergeKLists(ListNode[] lists)
     {
         // return MergeKListsMergeSort(lists, 0, lists.Length - 1);
-        return MergeKListsIteration(lists);
+        // return MergeKListsIteration(lists);
+        // return MergeKListsHeap(lists);
+        return MergeKListsHeap2(lists);
     }
 
     static void Main(string[] args)
     {
-        var res = MergeKLists(TestCase1());
+        var res = MergeKLists(TestCase2());
 
         return;
     }
