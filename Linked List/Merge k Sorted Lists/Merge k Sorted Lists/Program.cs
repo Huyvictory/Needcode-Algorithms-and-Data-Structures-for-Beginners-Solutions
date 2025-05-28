@@ -65,7 +65,7 @@ class Program
         return headMergedSortedLinkedList.next;
     }
 
-    // TC: O(nlogn), SC: O(n)
+    // TC: O(nlogk), SC: O(k)
     private static ListNode MergeKListsMergeSort(ListNode[] lists, int start, int end)
     {
         if (lists.Length == 0)
@@ -89,9 +89,24 @@ class Program
         return res;
     }
 
+    // TC: O(k), SC: O(1)
+    private static ListNode MergeKListsIteration(ListNode[] lists)
+    {
+        if (lists.Length == 0)
+            return null;
+
+        for (int i = 1; i < lists.Length; i++)
+        {
+            lists[i] = MergeTwoLinkedLists(lists[i], lists[i - 1]);
+        }
+
+        return lists[lists.Length - 1];
+    }
+
     public static ListNode MergeKLists(ListNode[] lists)
     {
-        return MergeKListsMergeSort(lists, 0, lists.Length - 1);
+        // return MergeKListsMergeSort(lists, 0, lists.Length - 1);
+        return MergeKListsIteration(lists);
     }
 
     static void Main(string[] args)
