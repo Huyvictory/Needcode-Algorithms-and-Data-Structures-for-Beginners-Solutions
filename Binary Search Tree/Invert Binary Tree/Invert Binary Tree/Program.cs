@@ -47,9 +47,42 @@ class Program
         return root;
     }
 
+    // TC: O(n), SC: O(n)
+    private static TreeNode InvertTreeBFS(TreeNode root)
+    {
+        if (root == null)
+            return null;
+
+        Queue<TreeNode> queue = new Queue<TreeNode>();
+
+        queue.Enqueue(root);
+
+        while (queue.Any())
+        {
+            // get the current root not and its left and right subtree
+            var dequeuedRoot = queue.Dequeue();
+            var leftChild = dequeuedRoot.left ?? null;
+            var rightChild = dequeuedRoot.right ?? null;
+
+            // Add to queue if the subtree from left or right exists
+            if (leftChild != null)
+                queue.Enqueue(leftChild);
+
+            if (rightChild != null)
+                queue.Enqueue(rightChild);
+
+            // Swap pointer of left and right subtrees of current root nodes
+            dequeuedRoot.right = leftChild!;
+            dequeuedRoot.left = rightChild!;
+        }
+
+        return root;
+    }
+
     public static TreeNode InvertTree(TreeNode root)
     {
-        return InvertTreeDFSPostOrder(root);
+        // return InvertTreeDFSPostOrder(root);
+        return InvertTreeBFS(root);
     }
 
     static void Main(string[] args)
