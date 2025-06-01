@@ -29,7 +29,7 @@ class Program
     }
 
     // TC: O(n), SC: O(n)
-    public static int MaxDepthDFSPreOrder(TreeNode root, int maxDepth)
+    private static int MaxDepthDFSPreOrder(TreeNode root, int maxDepth)
     {
         if (root == null)
             return 0;
@@ -46,9 +46,47 @@ class Program
         return Math.Max(maxDepthLeft, maxDepthRight);
     }
 
+    // TC: O(n), SC: O(n)
+    private static int MaxDepthBFS(TreeNode root)
+    {
+        if (root == null)
+            return 0;
+
+        Queue<TreeNode> queue = new Queue<TreeNode>();
+
+        queue.Enqueue(root);
+
+        int depth = 0;
+
+        while (queue.Count > 0)
+        {
+            // Get snapshot of current queue's count
+            for (int i = queue.Count; i > 0; i--)
+            {
+                var dequeuedRoot = queue.Dequeue();
+
+                if (dequeuedRoot.left != null)
+                {
+                    queue.Enqueue(dequeuedRoot.left);
+                }
+
+                if (dequeuedRoot.right != null)
+                {
+                    queue.Enqueue(dequeuedRoot.right);
+                }
+            }
+
+            // Increase the depth before traversing to the next level of the binary tree
+            depth++;
+        }
+
+        return depth;
+    }
+
     public static int MaxDepth(TreeNode root)
     {
-        return MaxDepthDFSPreOrder(root, 1);
+        // return MaxDepthDFSPreOrder(root, 1);
+        return MaxDepthBFS(root);
     }
 
     static void Main(string[] args)
