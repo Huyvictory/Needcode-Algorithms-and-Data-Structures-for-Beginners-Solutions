@@ -2,6 +2,8 @@
 
 class Program
 {
+    private static int maxDiameter = 0;
+
     private static TreeNode TestCase1()
     {
         var root = new TreeNode(1);
@@ -40,29 +42,78 @@ class Program
         return root;
     }
 
-    // TC: O(n), SC: O(n)
-    private static int DiameterOfBinaryTreeDFS(TreeNode root, int length)
+    private static TreeNode TestCase4()
     {
-        // If the node is a leaf node or a invalid one then return the traversed length
-        if (root == null || (root.left == null && root.right == null))
-            return length;
+        var root = new TreeNode(4);
+        var node_minus_9_1 = new TreeNode(-9);
+        var node_minus_7_1 = new TreeNode(-7);
+        var node_minus_7_2 = new TreeNode(-7);
+        var node_minus_6_1 = new TreeNode(-6);
+        var node_minus_6_2 = new TreeNode(-6);
+        var node_minus_4_1 = new TreeNode(-4);
+        var node_minus_4_2 = new TreeNode(-4);
+        var node_minus_3_1 = new TreeNode(-3);
+        var node_minus_3_2 = new TreeNode(-3);
+        var node_minus_2_1 = new TreeNode(-2);
+        var node_minus_1_1 = new TreeNode(-1);
+        var node_0 = new TreeNode(0);
+        var node_5 = new TreeNode(5);
+        var node_6_1 = new TreeNode(6);
+        var node_6_2 = new TreeNode(6);
+        var node_9_1 = new TreeNode(9);
+        var node_9_2 = new TreeNode(9);
 
-        // Calculate the traversed length on the left of the current root node
-        int traversedLengthLeft =
-            root.left != null ? DiameterOfBinaryTreeDFS(root.left, length + 1) : length;
+        root.left = node_minus_7_1;
+        root.right = node_minus_3_1;
+        node_minus_3_1.left = node_minus_9_1;
+        node_minus_3_1.right = node_minus_3_2;
+        node_minus_3_2.left = node_minus_4_2;
+        node_minus_9_1.left = node_9_1;
+        node_minus_9_1.right = node_minus_7_2;
+        node_9_1.left = node_6_1;
+        node_6_1.left = node_0;
+        node_6_1.right = node_6_2;
+        node_0.right = node_minus_1_1;
+        node_6_2.left = node_minus_4_1;
+        node_minus_7_2.left = node_minus_6_1;
+        node_minus_7_2.right = node_minus_6_2;
+        node_minus_6_1.left = node_5;
+        node_minus_6_2.left = node_9_2;
+        node_9_2.left = node_minus_2_1;
 
-        // Calculate the traversed length on the right of the current root node
-        int traversedLengthRight =
-            root.right != null ? DiameterOfBinaryTreeDFS(root.right, length + 1) : length;
+        return root;
+    }
 
-        return Math.Max(traversedLengthLeft, traversedLengthRight);
+    // TC: O(n), SC: O(n)
+    private static int DiameterOfBinaryTreeDFS(TreeNode root)
+    {
+        // If we have reached leaf node, return 1 as the traversed diameter
+        if (root.left == null && root.right == null)
+        {
+            return 1;
+        }
+
+        // Calculate the max traversed diameter length on the left subtree of the current root node
+        int traversedLengthLeft = root.left != null ? DiameterOfBinaryTreeDFS(root.left) : 0;
+
+        // Calculate the max traversed diameter length on the right subtree of the current root node
+        int traversedLengthRight = root.right != null ? DiameterOfBinaryTreeDFS(root.right) : 0;
+
+        // Check if the total of two max diameters of both left and right subtrees of the current node is larger than the global max diameter variable or not
+        if (traversedLengthLeft + traversedLengthRight > maxDiameter)
+        {
+            maxDiameter = traversedLengthLeft + traversedLengthRight;
+        }
+
+        // Find the max between max diameters of left and right subtrees of the current node and add 1
+        // We add 1 denoted as the current node and the returned value will be used to find the next max diameter of bigger sub problems
+        return Math.Max(traversedLengthLeft, traversedLengthRight) + 1;
     }
 
     public static int DiameterOfBinaryTree(TreeNode root)
     {
-        // Get the max length traversed from both left and right sub trees and find the sum of it
-        return (root.left != null ? DiameterOfBinaryTreeDFS(root.left, 1) : 0)
-            + (root.right != null ? DiameterOfBinaryTreeDFS(root.right, 1) : 0);
+        DiameterOfBinaryTreeDFS(root);
+        return maxDiameter;
     }
 
     static void Main(string[] args)
