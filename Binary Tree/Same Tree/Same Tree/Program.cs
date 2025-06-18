@@ -70,7 +70,7 @@ class Program
         bool hasSameLeftSubTree = false;
         bool hasSameRightSubTree = false;
 
-        // Both two current sub root nodes have the same value now
+        // Both two current sub root nodes have the same value noww
         // move on checking the value and the structure of left and right subtrees
         if (p != null && q != null && p.val == q.val)
         {
