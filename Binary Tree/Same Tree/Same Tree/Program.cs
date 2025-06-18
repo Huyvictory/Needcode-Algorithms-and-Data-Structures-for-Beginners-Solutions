@@ -57,7 +57,7 @@ class Program
     {
         // Both two current sub root nodes are null
         // means we have reached the end of both trees
-        // and they are structurally the samee
+        // and they are structurally the same
         if (p == null && q == null)
             return true;
 
