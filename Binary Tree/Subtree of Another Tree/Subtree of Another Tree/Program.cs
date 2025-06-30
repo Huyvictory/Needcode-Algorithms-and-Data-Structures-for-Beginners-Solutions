@@ -145,9 +145,28 @@ class Program
         return false;
     }
 
+    // TC: O(n * m), SC: O(n + m)
+    // n is the number of nodes in the root tree
+    // m is the number of nodes in the subRoot tree
+    private static bool IsSubtreeRecursiveDFS(TreeNode root, TreeNode subRoot)
+    {
+        if (root == null)
+        {
+            return false;
+        }
+
+        if (IsSameTreeDFS(root, subRoot))
+        {
+            return true;
+        }
+
+        return IsSubtreeRecursiveDFS(root.left, subRoot)
+            || IsSubtreeRecursiveDFS(root.right, subRoot);
+    }
+
     public static bool IsSubtree(TreeNode root, TreeNode subRoot)
     {
-        return IsSubtreeIterativeDFS(FindListSuitableSubRootNodes(root, subRoot), subRoot);
+        return IsSubtreeRecursiveDFS(root, subRoot);
     }
 
     static void Main(string[] args)
