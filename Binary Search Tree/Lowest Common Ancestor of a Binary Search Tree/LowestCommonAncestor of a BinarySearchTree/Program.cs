@@ -118,9 +118,7 @@ class Program
         // Or the root node is one of the sub root node p or q then just return it
         // Or sub root node p or q is in different branch and current sub root node is in the range of p and q
         if (
-            (root.left == p && root.right == q)
-            || (root.left == q && root.right == p)
-            || (root.val > p.val && root.val < q.val)
+            (root.val > p.val && root.val < q.val)
             || (root.val > q.val && root.val < p.val)
             || root == p
             || root == q
@@ -133,9 +131,37 @@ class Program
         return null;
     }
 
+    // TC: O(h), SC: O(1)
+    private static TreeNode LowestCommonAncestorIterative(TreeNode root, TreeNode p, TreeNode q)
+    {
+        while (root != null)
+        {
+            if (root.val > p.val && root.val > q.val)
+            {
+                root = root.left;
+            }
+            else if (root.val < p.val && root.val < q.val)
+            {
+                root = root.right;
+            }
+            else if (
+                (root.val > p.val && root.val < q.val)
+                || (root.val > q.val && root.val < p.val)
+                || (root == p)
+                || (root == q)
+            )
+            {
+                break;
+            }
+        }
+
+        return root;
+    }
+
     public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
     {
-        return LowestCommonAncestorDFS(root, p, q);
+        // return LowestCommonAncestorDFS(root, p, q);
+        return LowestCommonAncestorIterative(root, p, q);
     }
 
     static void Main(string[] args)
