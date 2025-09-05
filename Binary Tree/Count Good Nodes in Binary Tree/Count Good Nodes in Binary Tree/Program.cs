@@ -64,11 +64,36 @@ class Program
         GoodNodesDFS(root.right, maxValuePath);
     }
 
+    // TC: O(n), SC: O(n)
+    private static int GoodNodesDFS2(TreeNode root, int maxValuePath)
+    {
+        if (root == null)
+            return 0;
+
+        // The amount of good nodes for a certain sub root node
+        int goodNodesRootNode = 0;
+
+        if (root.val >= maxValuePath)
+        {
+            maxValuePath = root.val;
+
+            goodNodesRootNode = 1;
+        }
+
+        // Count number of good nodes on left sub tree
+        goodNodesRootNode += GoodNodesDFS2(root.left, maxValuePath);
+
+        // Count number of good nodes on right sub tree
+        goodNodesRootNode += GoodNodesDFS2(root.right, maxValuePath);
+
+        return goodNodesRootNode;
+    }
+
     public static int GoodNodes(TreeNode root)
     {
-        GoodNodesDFS(root, root.val);
+        // GoodNodesDFS(root, root.val);
 
-        return GoodNodesCount;
+        return GoodNodesDFS2(root, root.val);
     }
 
     static void Main(string[] args)
