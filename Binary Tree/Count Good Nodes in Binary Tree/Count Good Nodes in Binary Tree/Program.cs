@@ -89,11 +89,45 @@ class Program
         return goodNodesRootNode;
     }
 
+    private static int GoodNodesBFS(TreeNode root)
+    {
+        int goodNodesCount = 0;
+        Queue<(TreeNode root, int maxValuePath)> q = new Queue<(TreeNode root, int maxValuePath)>();
+
+        q.Enqueue((root, int.MinValue));
+
+        while (q.Count > 0)
+        {
+            var (currentNode, maxValue) = q.Dequeue();
+
+            if (currentNode.val >= maxValue)
+            {
+                goodNodesCount++;
+                maxValue = currentNode.val;
+            }
+
+            // Keep track the max value of every single node of each level (route) when compare to its parent node
+            if (currentNode.left != null)
+            {
+                q.Enqueue((currentNode.left, Math.Max(maxValue, currentNode.left.val)));
+            }
+
+            if (currentNode.right != null)
+            {
+                q.Enqueue((currentNode.right, Math.Max(maxValue, currentNode.right.val)));
+            }
+        }
+
+        return goodNodesCount;
+    }
+
     public static int GoodNodes(TreeNode root)
     {
         // GoodNodesDFS(root, root.val);
 
-        return GoodNodesDFS2(root, root.val);
+        // return GoodNodesDFS2(root, root.val);
+
+        return GoodNodesBFS(root);
     }
 
     static void Main(string[] args)
