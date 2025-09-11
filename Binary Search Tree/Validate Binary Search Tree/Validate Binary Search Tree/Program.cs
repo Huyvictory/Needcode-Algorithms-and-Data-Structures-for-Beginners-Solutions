@@ -66,6 +66,18 @@ class Program
         return root;
     }
 
+    private static TreeNode TestCase5()
+    {
+        TreeNode root = new TreeNode(2);
+        TreeNode node2_1 = new TreeNode(2);
+        TreeNode node2_2 = new TreeNode(2);
+
+        root.left = node2_1;
+        root.right = node2_2;
+
+        return root;
+    }
+
     // TC: O(n), SC: O(n)
     private static bool IsValidBST_DFS(TreeNode root)
     {
@@ -100,13 +112,30 @@ class Program
         return isLeftSubTreeValid && isRightSubTreeValid;
     }
 
+    // TC: O(n), SC: O(n)
+    private static bool isValidBST_DFS2(TreeNode root, long lowerBound, long upperBound)
+    {
+        if (root == null)
+            return true;
+
+        // If the current sub root node is not in the lowerBound and upperBound range
+        // Then it is node a valid binary search tree
+        if (!(root.val > lowerBound && root.val < upperBound))
+        {
+            return false;
+        }
+
+        return isValidBST_DFS2(root.left, lowerBound, root.val)
+            && isValidBST_DFS2(root.right, root.val, upperBound);
+    }
+
     public static bool IsValidBST(TreeNode root)
     {
-        return IsValidBST_DFS(root);
+        return isValidBST_DFS2(root, long.MinValue, long.MaxValue);
     }
 
     static void Main(string[] args)
     {
-        Console.WriteLine(IsValidBST(TestCase4()));
+        Console.WriteLine(IsValidBST(TestCase5()));
     }
 }
