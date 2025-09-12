@@ -87,6 +87,36 @@ class Program
         return -1;
     }
 
+    private static int KthSmallest2(TreeNode root, int k)
+    {
+        int res = 0;
+
+        KthSmallest_DFS(root, ref k, ref res);
+
+        return res;
+    }
+
+    // TC: O(k), SC: O(k)
+    private static void KthSmallest_DFS(TreeNode root, ref int k, ref int res)
+    {
+        if (root == null)
+        {
+            return;
+        }
+
+        KthSmallest_DFS(root.left, ref k, ref res);
+
+        k--;
+
+        if (k == 0)
+        {
+            res = root.val;
+            return;
+        }
+
+        KthSmallest_DFS(root.right, ref k, ref res);
+    }
+
     static void Main(string[] args)
     {
         Console.WriteLine(KthSmallest(TestCase1(), 3));
@@ -96,5 +126,9 @@ class Program
         Console.WriteLine(KthSmallestIteration(TestCase1(), 3));
         Console.WriteLine(KthSmallestIteration(TestCase2(), 1));
         Console.WriteLine(KthSmallestIteration(TestCase3(), 2));
+
+        Console.WriteLine(KthSmallest2(TestCase1(), 3));
+        Console.WriteLine(KthSmallest2(TestCase2(), 1));
+        Console.WriteLine(KthSmallest2(TestCase3(), 2));
     }
 }
